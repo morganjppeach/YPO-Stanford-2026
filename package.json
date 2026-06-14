@@ -1,0 +1,13 @@
+{
+  "name": "ypo-stanford-2026-professor-council",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Professor Council — AI versions of YPO Stanford 2026 class professors (Relevance AI backbone + gated portal).",
+  "scripts": {
+    "check": "node --env-file=.env scripts/check-connection.mjs"
+  },
+  "dependencies": {
+    "@relevanceai/sdk": "*"
+  }
+}

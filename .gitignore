@@ -2,3 +2,17 @@
 .env
 .env.*
 !.env.example
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build / cache
+dist/
+.cache/
+
+# OS
+.DS_Store
