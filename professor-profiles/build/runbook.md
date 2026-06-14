@@ -5,6 +5,9 @@ Generic, parameterized steps to create **one** "Ask the Professor" agent. Use th
 **B) scripted REST (automation, endpoints to confirm)**. Per `../../BUILD_NOTES.md`, the JS SDK can run
 agents but **cannot create** KBs/agents, so authoring uses the UI or REST.
 
+> **Path C — the Relevance Claude Code plugin** (terminal, natural-language; browser auth, no local key)
+> is documented in `runbook-cc-plugin.md`, with paste-ready pilots for James Zou + Darshan Shah.
+
 ## Parameters (fill from `agents/<slug>.md` frontmatter + dossier)
 
 | Param | Pilot value (james-zou) |
