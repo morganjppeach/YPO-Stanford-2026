@@ -19,3 +19,6 @@ data/
 
 # OS
 .DS_Store
+
+# Nested Lovable app clone (its own git repo: morganjppeach/faculty-whisperer-19)
+faculty-whisperer-19/
