@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask the Faculty — YPO × Stanford GSB 2026</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <style>
+    /* ============ DESIGN SYSTEM (Mastercard-inspired) ============ */
+    
+    /* COLOR TOKENS (Tailwind mappable) */
+    :root {
+      /* Primary: Warm orange/red (Mastercard-inspired cardinal) */
+      --color-primary-600: #E74C3C;     /* Warm cardinal red */
+      --color-primary-700: #C0392B;     /* darker cardinal */
+      --color-primary-500: #EC7063;     /* brighter cardinal (hover/active) */
+      --color-primary-400: #F5B7B1;     /* lighter tint for accents */
+      
+      /* Neutrals: Warm cream/ivory canvas */
+      --color-surface-bg: #FAF8F3;      /* warm cream background */
+      --color-surface-card: #FFFFFF;    /* card background */
+      --color-surface-soft: #F5F3F0;    /* soft accent bg */
+      --color-border: #E8E4DC;          /* warm hairline borders */
+      --color-text-primary: #2C2416;    /* warm charcoal text */
+      --color-text-muted: #7A6F65;      /* warm muted text */
+      --color-text-light: #A89E91;      /* lighter muted */
+      
+      /* Semantic */
+      --color-success: #27AE60;
+      --color-warning: #D68910;         /* warm amber caution */
+      --color-error: #E74C3C;
+      
+      /* Special: Orbital accent line */
+      --color-orbit: #E74C3C;           /* warm orange/red for orbital arcs */
+      --color-user-bubble: #F5F3F0;     /* warm soft bg for user messages */
+      
+      /* Spacing (8pt system) */
+      --space-0: 0;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      
+      /* Border radius: Generous pills (Mastercard style) */
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-pill: 9999px;
+      
+      /* Shadows: Soft, warm */
+      --shadow-sm: 0 2px 4px rgba(44, 36, 22, 0.08);
+      --shadow-md: 0 4px 12px rgba(44, 36, 22, 0.12);
+      --shadow-lg: 0 12px 24px rgba(44, 36, 22, 0.15);
+      
+      /* Typography: Editorial warmth */
+      --font-serif: 'Georgia', 'Garamond', serif;
+      --font-sans: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    }
+
+    /* Type scale: Editorial, warm */
+    :root {
+      /* Mobile */
+      --text-display: 32px / 1.15;
+      --text-h1: 28px / 1.2;
+      --text-h2: 24px / 1.35;
+      --text-h3: 20px / 1.35;
+      --text-body: 16px / 1.65;
+      --text-small: 14px / 1.5;
+      --text-caption: 12px / 1.45;
+      
+      @media (min-width: 1024px) {
+        --text-display: 48px / 1.1;
+        --text-h1: 40px / 1.2;
+        --text-h2: 32px / 1.25;
+        --text-h3: 24px / 1.35;
+        --text-body: 18px / 1.65;
+      }
+    }
+
+    /* ============ GLOBAL STYLES ============ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: var(--font-sans);
+      background: var(--color-surface-bg);
+      color: var(--color-text-primary);
+    }
+
+    body {
+      background: var(--color-surface-bg);
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* ============ LAYOUT ============ */
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+      background: var(--color-surface-bg);
+    }
+
+    .viewport {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ============ MOBILE FRAME ============ */
+    .frame-mobile {
+      width: 390px;
+      height: 844px;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-surface-bg);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .frame-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .frame-main {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .frame-tab-bar {
+      height: 60px;
+      border-top: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    /* ============ DESKTOP FRAME ============ */
+    .frame-desktop {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-surface-bg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ============ COMMON COMPONENTS ============ */
+
+    /* Header */
+    .app-header {
+      background: var(--color-surface-card);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      min-height: 56px;
+    }
+
+    .app-header-title {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      flex: 1;
+    }
+
+    .app-header-subtitle {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* ============ BRAND LOGO LOCKUP ============ */
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--color-surface-bg);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-mark svg { display: block; }
+
+    .brand-text { display: flex; flex-direction: column; }
+
+    .brand-wordmark {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-cobrand {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
+    .brand-cobrand .brand-cross {
+      color: var(--color-primary-600);
+      font-weight: 700;
+      margin: 0 1px;
+    }
+
+    /* Small mark for secondary screen headers */
+    .brand-mark-sm {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--color-surface-bg);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--color-text-primary);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-back:hover {
+      color: var(--color-primary-600);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 44px;
+      padding: var(--space-2) var(--space-4);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary-600);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-700);
+    }
+
+    .btn-primary:active {
+      background: var(--color-primary-500);
+    }
+
+    .btn-secondary {
+      background: var(--color-surface-bg);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-surface-card);
+    }
+
+    .btn-text {
+      background: none;
+      color: var(--color-primary-600);
+      border: none;
+      padding: var(--space-2);
+    }
+
+    .btn-text:hover {
+      color: var(--color-primary-700);
+    }
+
+    /* Chips: Generous pills with warm accents */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      border-radius: var(--radius-pill);
+      padding: var(--space-2) var(--space-4);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      color: var(--color-text-primary);
+    }
+
+    .chip:hover {
+      border-color: var(--color-primary-500);
+      background: var(--color-surface-soft);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chip.active {
+      background: var(--color-primary-600);
+      color: white;
+      border-color: var(--color-primary-600);
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+    }
+
+    /* Cards: Pill-shaped, warm shadows */
+    .card {
+      background: var(--color-surface-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      padding: var(--space-4);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-hover {
+      transition: all 0.2s ease;
+    }
+
+    .card-hover:hover {
+      border-color: var(--color-primary-500);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Disclaimer banner: Warm pill shape */
+    .disclaimer-banner {
+      background: #FEF6ED;
+      border: 1px solid #F5D9B8;
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      font-size: 11px;
+      line-height: 1.6;
+      color: #8B6F47;
+      margin: var(--space-4);
+      margin-bottom: var(--space-3);
+    }
+
+    /* Chat bubble styles */
+    .bubble-container {
+      display: flex;
+      gap: var(--space-2);
+      margin: var(--space-3) 0;
+      padding: 0 var(--space-4);
+      align-items: flex-start;
+    }
+
+    .bubble-user {
+      justify-content: flex-end;
+    }
+
+    .bubble-user .bubble-content {
+      background: var(--color-user-bubble);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+    }
+
+    .bubble-agent {
+      justify-content: flex-start;
+    }
+
+    .bubble-agent .bubble-content {
+      background: var(--color-surface-card);
+      border: 2px solid var(--color-border);
+      color: var(--color-text-primary);
+      position: relative;
+    }
+
+    /* Subtle orbital accent on agent bubbles */
+    .bubble-agent .bubble-content::before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--color-orbit);
+      border-radius: 50%;
+      top: -8px;
+      left: 12px;
+      opacity: 0.6;
+    }
+
+    .bubble-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .bubble-content {
+      max-width: 280px;
+      padding: var(--space-3);
+      border-radius: var(--radius-lg);
+      word-wrap: break-word;
+      line-height: 1.6;
+    }
+
+    .bubble-content h2 {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      margin: var(--space-3) 0 var(--space-2);
+      color: var(--color-text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .bubble-content h3 {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 600;
+      margin: var(--space-2) 0 var(--space-1);
+      color: var(--color-text-primary);
+    }
+
+    .bubble-content ul, .bubble-content ol {
+      margin: var(--space-2) 0;
+      padding-left: var(--space-4);
+    }
+
+    .bubble-content li {
+      margin: var(--space-1) 0;
+    }
+
+    .bubble-content strong {
+      font-weight: 600;
+    }
+
+    .bubble-content code {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .bubble-content blockquote {
+      border-left: 3px solid var(--color-border);
+      padding-left: var(--space-3);
+      margin: var(--space-2) 0;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .bubble-content table {
+      margin: var(--space-2) 0;
+      font-size: 13px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .bubble-content table th,
+    .bubble-content table td {
+      padding: var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+    }
+
+    .bubble-content table th {
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .bubble-metadata {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: var(--space-1);
+      margin-bottom: var(--space-2);
+    }
+
+    .bubble-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+
+    .btn-action {
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      color: var(--color-primary-600);
+      background: rgba(140, 21, 21, 0.05);
+    }
+
+    /* Input/Composer */
+    .composer-box {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      padding: var(--space-4);
+      background: var(--color-surface-card);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      transition: all 0.2s ease;
+      background: var(--color-surface-card);
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--color-primary-600);
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    }
+
+    .input-field::placeholder {
+      color: var(--color-text-light);
+    }
+
+    /* Search field */
+    .search-field {
+      position: relative;
+      margin: var(--space-4);
+      margin-bottom: var(--space-2);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      background: var(--color-surface-card);
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-primary-600);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: var(--space-3);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    /* Faculty grid */
+    .faculty-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      padding-top: 0;
+    }
+
+    @media (min-width: 430px) {
+      .faculty-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .faculty-grid {
+        grid-template-columns: repeat(3, 1fr);
+        padding: var(--space-6);
+        padding-top: 0;
+      }
+    }
+
+    .faculty-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    /* Orbital accent on hover */
+    .faculty-card::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--color-orbit);
+      border-radius: 50%;
+      top: -4px;
+      right: 24px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .faculty-card:hover {
+      border-color: var(--color-primary-500);
+      box-shadow: var(--shadow-md);
+    }
+
+    .faculty-card:hover::after {
+      opacity: 0.7;
+    }
+
+    .faculty-header {
+      display: flex;
+      gap: var(--space-3);
+      align-items: flex-start;
+    }
+
+    .faculty-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .faculty-info {
+      flex: 1;
+    }
+
+    .faculty-name {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .faculty-session {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    .faculty-domain {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .faculty-cta {
+      padding: var(--space-2) 0;
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+      margin-top: var(--space-2);
+    }
+
+    .faculty-cta button {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+    }
+
+    /* Tab bar */
+    .tab-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--color-text-muted);
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .tab-item.active {
+      color: var(--color-primary-600);
+    }
+
+    .tab-icon {
+      font-size: 24px;
+    }
+
+    /* Welcome gate */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      gap: var(--space-6);
+      text-align: center;
+    }
+
+    .welcome-card {
+      background: var(--color-surface-card);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      border: 1px solid var(--color-border);
+      max-width: 340px;
+    }
+
+    .welcome-icon {
+      font-size: 56px;
+      margin-bottom: var(--space-4);
+    }
+
+    .welcome-title {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: var(--space-3);
+      color: var(--color-text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-subtitle {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+
+    .welcome-disclaimer {
+      background: #FEF6ED;
+      border: 1px solid #F5D9B8;
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      font-size: 11px;
+      line-height: 1.6;
+      color: #8B6F47;
+      margin-bottom: var(--space-4);
+      text-align: left;
+    }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      gap: var(--space-4);
+      text-align: center;
+    }
+
+    .empty-headline {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .empty-subtext {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      max-width: 280px;
+    }
+
+    .empty-chips {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      width: 100%;
+      margin-top: var(--space-2);
+    }
+
+    .chip-large {
+      padding: var(--space-3) var(--space-4);
+      font-size: 13px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* Typing indicator */
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 20px;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-text-light);
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; }
+      30% { opacity: 1; }
+    }
+
+    /* Scroll region */
+    .chat-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: var(--space-4);
+    }
+
+    /* Program list */
+    .program-list {
+      padding: var(--space-4);
+    }
+
+    .program-item {
+      padding: var(--space-4);
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .program-item:hover {
+      border-color: var(--color-primary-600);
+      box-shadow: var(--shadow-md);
+    }
+
+    .program-number {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: var(--space-1);
+    }
+
+    .program-name {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-1);
+      letter-spacing: -0.2px;
+    }
+
+    .program-meta {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    /* Caution line: Warm pill */
+    .caution-line {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3);
+      background: #FEF6ED;
+      border: 1px solid #F5D9B8;
+      border-radius: var(--radius-md);
+      margin: 0 var(--space-4) var(--space-3);
+      font-size: 12px;
+      color: #8B6F47;
+      letter-spacing: 0.2px;
+    }
+
+    .caution-icon {
+      font-size: 16px;
+    }
+
+    /* Attribution chip: Warm pill */
+    .attribution-chip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-surface-soft);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-border);
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin: var(--space-3) var(--space-4) 0;
+      width: fit-content;
+    }
+
+    .attribution-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* Device selector */
+    .device-selector {
+      position: fixed;
+      top: var(--space-4);
+      left: var(--space-4);
+      display: flex;
+      gap: var(--space-2);
+      z-index: 1000;
+    }
+
+    .device-btn {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .device-btn.active {
+      background: var(--color-primary-600);
+      color: white;
+      border-color: var(--color-primary-600);
+    }
+
+    /* Responsive layout wrapper */
+    .viewport-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #f0f0f0;
+      padding: var(--space-4);
+    }
+
+    /* Design system showcase */
+    .design-system-grid {
+      display: grid;
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+
+    .ds-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .ds-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .ds-grid {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .ds-item {
+      padding: var(--space-4);
+      background: var(--color-surface-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+    }
+
+    .ds-label {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+    }
+
+    .ds-color-swatch {
+      width: 100%;
+      height: 80px;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+      border: 1px solid var(--color-border);
+    }
+
+    .ds-color-hex {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    /* ============ ROUTING MODE SELECTOR ============ */
+    .mode-selector {
+      display: flex;
+      gap: var(--space-1);
+      padding: var(--space-1);
+      background: var(--color-surface-soft);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      margin: var(--space-3) var(--space-4) 0;
+    }
+
+    .mode-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: var(--space-2) var(--space-3);
+      border: none;
+      background: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.1px;
+      min-height: 38px;
+    }
+
+    .mode-tab .mode-tab-icon {
+      font-size: 14px;
+    }
+
+    .mode-tab.active {
+      background: var(--color-surface-card);
+      color: var(--color-primary-600);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ============ TARGET BAR (composer routing chip) ============ */
+    .target-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface-soft);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .target-bar:hover {
+      border-color: var(--color-primary-500);
+    }
+
+    .target-bar-label {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .target-bar-value {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .target-bar-chevron {
+      color: var(--color-text-muted);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    /* Mini avatar stack */
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar-stack .mini-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      background: var(--color-surface-soft);
+      border: 1.5px solid var(--color-surface-card);
+      margin-left: -6px;
+    }
+
+    .avatar-stack .mini-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .target-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    /* ============ PICKER SHEET ============ */
+    .sheet-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(44, 36, 22, 0.4);
+      display: flex;
+      align-items: flex-end;
+      z-index: 100;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .sheet-overlay.desktop {
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .sheet {
+      background: var(--color-surface-card);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-height: 80%;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .sheet.desktop {
+      border-radius: var(--radius-lg);
+      max-width: 460px;
+      max-height: 70%;
+      animation: scaleIn 0.2s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 2px;
+      margin: var(--space-3) auto var(--space-2);
+      flex-shrink: 0;
+    }
+
+    .sheet-header {
+      padding: var(--space-2) var(--space-4) var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .sheet-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .sheet-subtitle {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    .sheet-search {
+      position: relative;
+      padding: var(--space-3) var(--space-4) var(--space-2);
+      flex-shrink: 0;
+    }
+
+    .sheet-search input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4) var(--space-3) 40px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      background: var(--color-surface-bg);
+    }
+
+    .sheet-search input:focus {
+      outline: none;
+      border-color: var(--color-primary-600);
+    }
+
+    .sheet-search-icon {
+      position: absolute;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    .sheet-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-2) var(--space-3) var(--space-3);
+    }
+
+    .picker-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .picker-row:hover {
+      background: var(--color-surface-soft);
+    }
+
+    .picker-row.selected {
+      background: rgba(231, 76, 60, 0.06);
+    }
+
+    .picker-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: var(--color-surface-soft);
+      flex-shrink: 0;
+    }
+
+    .picker-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .picker-name {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .picker-domain {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .picker-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+      color: white;
+      font-size: 13px;
+    }
+
+    .picker-row.selected .picker-check {
+      background: var(--color-primary-600);
+      border-color: var(--color-primary-600);
+    }
+
+    .picker-radio {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--color-border);
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .picker-row.selected .picker-radio {
+      border-color: var(--color-primary-600);
+    }
+
+    .picker-row.selected .picker-radio::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--color-primary-600);
+    }
+
+    .sheet-footer {
+      padding: var(--space-3) var(--space-4) var(--space-4);
+      border-top: 1px solid var(--color-border);
+      flex-shrink: 0;
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+    }
+
+    .sheet-footer-info {
+      flex: 1;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    /* ============ COUNCIL ANSWERS ============ */
+    .council-convening {
+      padding: var(--space-3) var(--space-4);
+    }
+
+    .council-convening-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      margin-bottom: var(--space-3);
+    }
+
+    .convening-avatars {
+      display: flex;
+    }
+
+    .convening-avatars .mini-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: var(--color-surface-soft);
+      border: 2px solid var(--color-surface-card);
+      margin-left: -8px;
+      animation: pulse 1.4s infinite;
+    }
+
+    .convening-avatars .mini-avatar:first-child { margin-left: 0; }
+    .convening-avatars .mini-avatar:nth-child(2) { animation-delay: 0.2s; }
+    .convening-avatars .mini-avatar:nth-child(3) { animation-delay: 0.4s; }
+    .convening-avatars .mini-avatar:nth-child(4) { animation-delay: 0.6s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    .council-answer-card {
+      background: var(--color-surface-card);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin: 0 var(--space-4) var(--space-3);
+      overflow: hidden;
+    }
+
+    .council-answer-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-surface-soft);
+    }
+
+    .council-answer-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: var(--color-surface-card);
+      flex-shrink: 0;
+    }
+
+    .council-answer-name {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .council-answer-domain {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 1px;
+    }
+
+    .council-answer-body {
+      padding: var(--space-3);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-text-primary);
+    }
+
+    .council-answer-body h2,
+    .council-answer-body h3 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .council-answer-body h2 { font-size: 15px; margin: var(--space-2) 0 var(--space-1); }
+    .council-answer-body h3 { font-size: 14px; margin: var(--space-2) 0 var(--space-1); }
+    .council-answer-body ul, .council-answer-body ol { margin: var(--space-2) 0; padding-left: var(--space-4); }
+    .council-answer-body li { margin: var(--space-1) 0; }
+    .council-answer-body p { margin-bottom: var(--space-2); }
+    .council-answer-body strong { font-weight: 600; }
+
+    /* Council synthesis card */
+    .council-synthesis {
+      background: linear-gradient(135deg, #FFF8F3 0%, #FDF1EA 100%);
+      border: 1.5px solid var(--color-primary-400);
+      border-radius: var(--radius-lg);
+      margin: var(--space-2) var(--space-4) var(--space-3);
+      overflow: hidden;
+    }
+
+    .council-synthesis-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--color-primary-400);
+    }
+
+    .council-synthesis-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary-600);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .council-synthesis-title {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary-700);
+      letter-spacing: -0.2px;
+    }
+
+    .council-synthesis-sub {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 1px;
+    }
+
+    .council-synthesis-body {
+      padding: var(--space-3);
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--color-text-primary);
+    }
+
+    .council-synthesis-body strong { font-weight: 600; color: var(--color-primary-700); }
+    .council-synthesis-body p { margin-bottom: var(--space-2); }
+
+    /* Section divider for council */
+    .council-section-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin: var(--space-3) var(--space-4) var(--space-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--color-text-muted);
+    }
+
+    .council-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    /* Topic filter chips row */
+    .filter-row {
+      display: flex;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4) var(--space-3);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      flex-shrink: 0;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .filter-chip.active {
+      background: var(--color-primary-600);
+      color: white;
+      border-color: var(--color-primary-600);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    /* ============ FACULTY DATA ============ */
+    const FACULTY = [
+      {
+        id: 'zou',
+        emoji: '🧬',
+        name: 'Prof. James Zou',
+        session: 'Multi-Agent AI Teams Accelerating Discovery',
+        domain: 'AI for science / R&D',
+        slug: 'james-zou'
+      },
+      {
+        id: 'papa',
+        emoji: '🏁',
+        name: 'Andy "Papa" Papathanassiou',
+        session: 'Innovation Mindset: Going Fast',
+        domain: 'High-performance teams',
+        slug: 'andy-papa'
+      },
+      {
+        id: 'shiv',
+        emoji: '🧠',
+        name: 'Prof. Baba Shiv',
+        session: 'Architecting the Mind & Body for Success',
+        domain: 'Decision neuroscience',
+        slug: 'baba-shiv'
+      },
+      {
+        id: 'oreilly',
+        emoji: '🔄',
+        name: 'Prof. Charles O\'Reilly',
+        session: 'The Ambidextrous Leader',
+        domain: 'Org change / success trap',
+        slug: 'charles-oreilly'
+      },
+      {
+        id: 'kahl',
+        emoji: '🌐',
+        name: 'Dr. Colin Kahl',
+        session: 'Geopolitical Implications of the AI Race',
+        domain: 'Geopolitics',
+        slug: 'colin-kahl'
+      },
+      {
+        id: 'klein',
+        emoji: '🎙️',
+        name: 'Dan Klein',
+        session: 'The Art & Science of Storytelling',
+        domain: 'Communications',
+        slug: 'dan-klein'
+      },
+      {
+        id: 'shah',
+        emoji: '🧬',
+        name: 'Dr. Darshan Shah',
+        session: 'Longevity & Health Optimization',
+        domain: 'Health & longevity',
+        slug: 'darshan-shah',
+        caution: true
+      },
+      {
+        id: 'yang',
+        emoji: '🤖',
+        name: 'Prof. Diyi Yang',
+        session: 'The Art of the Possible with Generative AI',
+        domain: 'Generative AI',
+        slug: 'diyi-yang'
+      },
+      {
+        id: 'sampath',
+        emoji: '🛡️',
+        name: 'DJ Sampath',
+        session: 'Enterprise AI at Scale',
+        domain: 'AI security',
+        slug: 'dj-sampath'
+      },
+      {
+        id: 'dehaan',
+        emoji: '📊',
+        name: 'Prof. Ed deHaan',
+        session: 'AI-Powered Accounting and Finance',
+        domain: 'Finance',
+        slug: 'ed-dehaan'
+      },
+      {
+        id: 'saper',
+        emoji: '🚀',
+        name: 'Jake Saper',
+        session: 'AI-native services / venture',
+        domain: 'Investing',
+        slug: 'jake-saper',
+        caution: true
+      },
+      {
+        id: 'siminoff',
+        emoji: '🔔',
+        name: 'Jamie Siminoff',
+        session: 'Founder of Ring',
+        domain: 'Hardware entrepreneurship',
+        slug: 'jamie-siminoff'
+      },
+      {
+        id: 'levav',
+        emoji: '⚖️',
+        name: 'Prof. Jonathan Levav',
+        session: 'Behavioral science & decision-making',
+        domain: 'Behavioral science',
+        slug: 'jonathan-levav'
+      },
+      {
+        id: 'shotts',
+        emoji: '⚖️',
+        name: 'Prof. Ken Shotts',
+        session: 'Living Up to Your Values',
+        domain: 'Values-based leadership',
+        slug: 'ken-shotts'
+      },
+      {
+        id: 'bronstein',
+        emoji: '🎮',
+        name: 'Manuel Bronstein',
+        session: 'Building World-Class Products',
+        domain: 'Product',
+        slug: 'manuel-bronstein'
+      },
+      {
+        id: 'lepech',
+        emoji: '🏗️',
+        name: 'Prof. Michael Lepech',
+        session: 'Organizational Imperatives for AI Value Capture',
+        domain: 'AI value capture',
+        slug: 'michael-lepech'
+      },
+      {
+        id: 'brady',
+        emoji: '🚀',
+        name: 'Prof. Scott Brady',
+        session: 'AI Applications in Silicon Valley',
+        domain: 'Investing',
+        slug: 'scott-brady',
+        caution: true
+      }
+    ];
+
+    const SAMPLE_RESPONSE = `## Where AI agents can accelerate your R&D
+
+A staged, human-in-the-loop approach works best:
+
+- **Generate** candidates with a multi-agent team
+- **Filter** computationally before any wet-lab spend
+- **Validate** the top few experimentally
+
+| Stage | Human oversight |
+|---|---|
+| Generate | Low — set the goal |
+| Validate | High — sign-off gate |
+
+In the Virtual Lab, 92 candidates → 2 validated binders. Start where a bottleneck is measurable.`;
+
+    /* Per-professor short answers used in Council mode */
+    const COUNCIL_RESPONSES = {
+      oreilly: `Resistance is usually structural, not personal. Your **exploit** engine is wired to defend the core, so it treats AI as a threat. Protect a small **explore** unit with its own metrics and a senior sponsor — don't make it justify itself with this quarter's P&L.`,
+      yang: `Start where the work already lives. Pick one high-friction workflow, put a generative tool in front of the team that owns it, and let them shape the prompts. **Adoption follows ownership** — top-down mandates stall, peer demos spread.`,
+      lepech: `Value capture needs a measurable baseline before the tool lands. Define the metric you expect to move — cycle time, error rate, cost per unit — then instrument it. If you can't see the delta, the org will quietly revert.`,
+      shiv: `People resist what threatens their sense of competence. Frame AI as a way to do their **best** work, not fewer people doing the same work. The emotional frame — gain vs. loss — decides adoption long before the feature set does.`,
+      saper: `Fund the wedge, not the platform. Back the one team with a painful, repeatable task and let an AI-native workflow prove ROI there first. *(General education, not investment advice.)*`
+    };
+
+    /* Council synthesis text (concierge's blend) */
+    const SYNTHESIS_TEXT = `Across the faculty, one throughline: **resistance is a system, not a mood.** O'Reilly and Lepech both say protect a small explore unit and instrument a baseline metric before the tool lands. Shiv and Yang agree the unlock is psychological and social — frame AI as doing your *best* work, give the owning team the prompts, and let peer demos spread it. Practical first move: pick one high-friction workflow with a measurable bottleneck, give it a senior sponsor, and prove the delta there.`;
+
+    /* ============ COMPONENTS ============ */
+
+    /* Co-brand emblem: two overlapping circles (YPO ∩ Stanford GSB) — orbital motif */
+    function BrandMark({ size = 26 }) {
+      return (
+        <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+          {/* Orbital arc */}
+          <circle cx="18" cy="18" r="16" fill="none" stroke="#E74C3C" strokeWidth="1" strokeDasharray="2.5 4" opacity="0.45" />
+          {/* YPO — filled cardinal disc */}
+          <circle cx="14.5" cy="18" r="8.5" fill="#E74C3C" />
+          {/* Stanford GSB — outlined disc */}
+          <circle cx="21.5" cy="18" r="8.5" fill="none" stroke="#2C2416" strokeWidth="1.6" />
+          {/* Orbital node */}
+          <circle cx="32" cy="11" r="1.8" fill="#E74C3C" />
+        </svg>
+      );
+    }
+
+    function BrandLockup() {
+      return (
+        <div className="brand-lockup">
+          <div className="brand-mark"><BrandMark size={26} /></div>
+          <div className="brand-text">
+            <span className="brand-wordmark">Ask the Faculty</span>
+            <span className="brand-cobrand">YPO<span className="brand-cross">✕</span>Stanford GSB · 2026</span>
+          </div>
+        </div>
+      );
+    }
+
+    function MarkdownRenderer({ content }) {
+      const lines = content.split('\n');
+      const out = [];
+      let listBuf = [];
+      let tableBuf = [];
+      const flushList = (k) => {
+        if (listBuf.length) { out.push(<ul key={'ul' + k}>{listBuf}</ul>); listBuf = []; }
+      };
+      const flushTable = (k) => {
+        if (!tableBuf.length) return;
+        const rows = tableBuf.filter(r => !/^[-\s|:]+$/.test(r.join('')));
+        const header = rows[0] || [];
+        const body = rows.slice(1);
+        out.push(
+          <div key={'tbl' + k} style={{ overflowX: 'auto', margin: '8px 0' }}>
+            <table>
+              <thead><tr>{header.map((c, j) => <th key={j}>{formatInline(c)}</th>)}</tr></thead>
+              <tbody>{body.map((r, ri) => <tr key={ri}>{r.map((c, j) => <td key={j}>{formatInline(c)}</td>)}</tr>)}</tbody>
+            </table>
+          </div>
+        );
+        tableBuf = [];
+      };
+
+      lines.forEach((line, i) => {
+        const t = line.trim();
+        if (t.startsWith('|')) {
+          const cells = t.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+          tableBuf.push(cells);
+          return;
+        }
+        flushTable(i);
+        if (t.startsWith('## ')) { flushList(i); out.push(<h2 key={i}>{formatInline(t.slice(3))}</h2>); }
+        else if (t.startsWith('### ')) { flushList(i); out.push(<h3 key={i}>{formatInline(t.slice(4))}</h3>); }
+        else if (t.startsWith('- ')) { listBuf.push(<li key={i}>{formatInline(t.slice(2))}</li>); }
+        else if (t === '') { flushList(i); }
+        else { flushList(i); out.push(<p key={i} style={{ marginBottom: '8px' }}>{formatInline(t)}</p>); }
+      });
+      flushList('end');
+      flushTable('end');
+      return <div>{out}</div>;
+    }
+
+    function ChatBubble({ message, professor }) {
+      const isUser = message.role === 'user';
+      const prof = FACULTY.find(f => f.id === message.professor);
+
+      return (
+        <div className={`bubble-container ${isUser ? 'bubble-user' : 'bubble-agent'}`}>
+          {!isUser && prof && (
+            <div className="bubble-avatar" style={{ background: 'var(--color-surface-soft)' }}>
+              {prof.emoji}
+            </div>
+          )}
+          <div style={isUser ? { maxWidth: '78%' } : { flex: 1, minWidth: 0 }}>
+            {!isUser && (
+              <div className="bubble-metadata">{prof?.name || 'Assistant'}</div>
+            )}
+            <div className="bubble-content">
+              {message.text.includes('#') ? (
+                <MarkdownRenderer content={message.text} />
+              ) : (
+                message.text
+              )}
+            </div>
+            {!isUser && (
+              <>
+                <div className="bubble-actions">
+                  <button className="btn-action">📋 Copy</button>
+                  <button className="btn-action">🔄 Regenerate</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function MobileFrame({ children }) {
+      return (
+        <div className="frame-mobile">
+          {children}
+        </div>
+      );
+    }
+
+    function DesktopFrame({ children }) {
+      return (
+        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          {children}
+        </div>
+      );
+    }
+
+    function TabBar({ activeTab, onTabChange }) {
+      return (
+        <div className="frame-tab-bar">
+          <button
+            className={`tab-item ${activeTab === 'ask' ? 'active' : ''}`}
+            onClick={() => onTabChange('ask')}
+          >
+            <div className="tab-icon">🎓</div>
+            <div>Ask</div>
+          </button>
+          <button
+            className={`tab-item ${activeTab === 'faculty' ? 'active' : ''}`}
+            onClick={() => onTabChange('faculty')}
+          >
+            <div className="tab-icon">👥</div>
+            <div>Faculty</div>
+          </button>
+          <button
+            className={`tab-item ${activeTab === 'program' ? 'active' : ''}`}
+            onClick={() => onTabChange('program')}
+          >
+            <div className="tab-icon">📚</div>
+            <div>Program</div>
+          </button>
+        </div>
+      );
+    }
+
+    /* ============ SCREENS ============ */
+
+    function WelcomeScreen({ onEnter, isMobile }) {
+      return (
+        <div className="welcome-screen" style={{ height: isMobile ? '844px' : '100vh' }}>
+          <div className="welcome-card">
+            <div className="welcome-icon" style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="brand-mark" style={{ width: '72px', height: '72px', borderRadius: 'var(--radius-md)' }}>
+                <BrandMark size={48} />
+              </div>
+            </div>
+            <h1 className="welcome-title">Ask the Faculty</h1>
+            <p className="welcome-subtitle">
+              Chat with AI study aids modeled on Stanford GSB faculty and guest speakers. Learn their frameworks and apply them to your business.
+            </p>
+            <div className="welcome-disclaimer">
+              These are AI educational study aids modeled on the named faculty for the YPO × Stanford GSB 2026 program. They are NOT the actual individuals and do not represent them, Stanford, or their employers, and do not provide individualized medical, legal, or investment advice.
+            </div>
+            <button className="btn btn-primary" onClick={onEnter} style={{ width: '100%' }}>
+              Enter
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    /* Inline markdown: **bold** and *italic* */
+    function formatInline(text) {
+      const nodes = [];
+      const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+      let lastIndex = 0;
+      let key = 0;
+      let m;
+      while ((m = regex.exec(text)) !== null) {
+        if (m.index > lastIndex) nodes.push(text.slice(lastIndex, m.index));
+        if (m[2] !== undefined) nodes.push(<strong key={key++}>{m[2]}</strong>);
+        else if (m[3] !== undefined) nodes.push(<em key={key++}>{m[3]}</em>);
+        lastIndex = regex.lastIndex;
+      }
+      if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+      return nodes;
+    }
+
+    /* Block markdown: headings, lists, paragraphs (no tables) */
+    function RichText({ content }) {
+      const lines = content.split('\n');
+      const out = [];
+      let listBuf = [];
+      const flush = (k) => {
+        if (listBuf.length) { out.push(<ul key={'ul' + k}>{listBuf}</ul>); listBuf = []; }
+      };
+      lines.forEach((line, i) => {
+        if (line.startsWith('## ')) { flush(i); out.push(<h2 key={i}>{formatInline(line.slice(3))}</h2>); }
+        else if (line.startsWith('### ')) { flush(i); out.push(<h3 key={i}>{formatInline(line.slice(4))}</h3>); }
+        else if (line.startsWith('- ')) { listBuf.push(<li key={i}>{formatInline(line.slice(2))}</li>); }
+        else if (line.trim() === '') { flush(i); }
+        else { flush(i); out.push(<p key={i}>{formatInline(line)}</p>); }
+      });
+      flush('end');
+      return <div>{out}</div>;
+    }
+
+    /* Professor / Council picker sheet */
+    function PickerSheet({ mode, selected, onClose, onConfirm, isMobile }) {
+      const [search, setSearch] = useState('');
+      const [localSel, setLocalSel] = useState(selected);
+
+      const filtered = FACULTY.filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.domain.toLowerCase().includes(search.toLowerCase()) ||
+        p.session.toLowerCase().includes(search.toLowerCase())
+      );
+
+      const toggle = (id) => {
+        if (mode === 'council') {
+          setLocalSel(localSel.includes(id) ? localSel.filter(x => x !== id) : [...localSel, id]);
+        } else {
+          setLocalSel([id]);
+        }
+      };
+
+      return (
+        <div className={'sheet-overlay' + (isMobile ? '' : ' desktop')} onClick={onClose}>
+          <div className={'sheet' + (isMobile ? '' : ' desktop')} onClick={(e) => e.stopPropagation()}>
+            {isMobile && <div className="sheet-handle"></div>}
+            <div className="sheet-header">
+              <div className="sheet-title">{mode === 'council' ? 'Convene a Council' : 'Choose a professor'}</div>
+              <div className="sheet-subtitle">
+                {mode === 'council'
+                  ? 'Select several — each answers, then the concierge synthesizes'
+                  : 'Direct your question to one faculty member'}
+              </div>
+            </div>
+            <div className="sheet-search">
+              <span className="sheet-search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Search faculty…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                autoFocus
+              />
+            </div>
+            <div className="sheet-list">
+              {filtered.map((p) => {
+                const sel = localSel.includes(p.id);
+                return (
+                  <div
+                    key={p.id}
+                    className={'picker-row' + (sel ? ' selected' : '')}
+                    onClick={() => toggle(p.id)}
+                  >
+                    <div className="picker-avatar">{p.emoji}</div>
+                    <div className="picker-info">
+                      <div className="picker-name">{p.name}</div>
+                      <div className="picker-domain">{p.domain}{p.caution ? ' · caution applies' : ''}</div>
+                    </div>
+                    {mode === 'council'
+                      ? <div className="picker-check">{sel ? '✓' : ''}</div>
+                      : <div className="picker-radio"></div>}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="sheet-footer">
+              <div className="sheet-footer-info">
+                {mode === 'council' ? `${localSel.length} selected` : ''}
+              </div>
+              <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => onConfirm(localSel)}
+                disabled={localSel.length === 0}
+              >
+                {mode === 'council' ? `Convene${localSel.length ? ' ' + localSel.length : ''}` : 'Select'}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* Council answer block: per-professor cards + synthesis */
+    function CouncilBlock({ msg }) {
+      return (
+        <div>
+          <div className="council-section-label">{msg.profs.length} faculty responses</div>
+          {msg.answers.map((a, i) => {
+            const p = FACULTY.find(f => f.id === a.professor);
+            return (
+              <div className="council-answer-card" key={i}>
+                <div className="council-answer-header">
+                  <div className="council-answer-avatar">{p.emoji}</div>
+                  <div style={{ minWidth: 0 }}>
+                    <div className="council-answer-name">{p.name}</div>
+                    <div className="council-answer-domain">{p.session}</div>
+                  </div>
+                </div>
+                <div className="council-answer-body"><RichText content={a.text} /></div>
+              </div>
+            );
+          })}
+          <div className="council-section-label">Concierge synthesis</div>
+          <div className="council-synthesis">
+            <div className="council-synthesis-header">
+              <div className="council-synthesis-badge">🎓</div>
+              <div>
+                <div className="council-synthesis-title">The Council says</div>
+                <div className="council-synthesis-sub">Blended from {msg.profs.length} faculty perspectives</div>
+              </div>
+            </div>
+            <div className="council-synthesis-body"><RichText content={msg.synthesis} /></div>
+          </div>
+        </div>
+      );
+    }
+
+    function AskScreen({ isMobile }) {
+      const [messages, setMessages] = useState([]);
+      const [input, setInput] = useState('');
+      const [isTyping, setIsTyping] = useState(false);
+      const [convening, setConvening] = useState(false);
+      const [mode, setMode] = useState('auto');                 // 'auto' | 'direct' | 'council'
+      const [directProf, setDirectProf] = useState('zou');
+      const [councilProfs, setCouncilProfs] = useState(['oreilly', 'yang', 'shiv', 'lepech']);
+      const [showPicker, setShowPicker] = useState(false);
+      const scrollRef = useRef(null);
+
+      const starterChips = [
+        'My org resists AI adoption — who should I learn from?',
+        'Where could AI agents accelerate my R&D?',
+        'Make my board update more compelling',
+        'The 80/20 of executive healthspan'
+      ];
+
+      useEffect(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }, [messages, isTyping, convening]);
+
+      const routeQuestion = (text) => {
+        const t = text.toLowerCase();
+        if (/r&d|research|discovery|science|\blab\b/.test(t)) return 'zou';
+        if (/board|story|storytell|present|pitch|communicat|compelling/.test(t)) return 'klein';
+        if (/health|longevity|sleep|healthspan|body/.test(t)) return 'shah';
+        if (/finance|account|number|audit/.test(t)) return 'dehaan';
+        if (/product|roadmap|feature/.test(t)) return 'bronstein';
+        if (/security|enterprise|scale/.test(t)) return 'sampath';
+        if (/values|ethic/.test(t)) return 'shotts';
+        return 'oreilly';
+      };
+
+      const targetProf = FACULTY.find(f => f.id === directProf);
+      const councilSelected = FACULTY.filter(f => councilProfs.includes(f.id));
+
+      const handleSend = () => {
+        if (!input.trim()) return;
+        const q = input.trim();
+        setInput('');
+
+        if (mode === 'council') {
+          const profs = [...councilProfs];
+          setMessages(m => [...m, { role: 'user', text: q }]);
+          setConvening(true);
+          setTimeout(() => {
+            setConvening(false);
+            setMessages(m => [...m, {
+              role: 'assistant',
+              type: 'council',
+              profs,
+              answers: profs.map(id => ({
+                professor: id,
+                text: COUNCIL_RESPONSES[id] || 'Drawing on my session material, here is how I would approach this — start small, measure the bottleneck, and iterate.'
+              })),
+              synthesis: SYNTHESIS_TEXT
+            }]);
+          }, 2600);
+        } else {
+          const target = mode === 'direct' ? directProf : routeQuestion(q);
+          setMessages(m => [...m, { role: 'user', text: q }]);
+          setIsTyping({ prof: target });
+          setTimeout(() => {
+            setIsTyping(false);
+            setMessages(m => [...m, {
+              role: 'assistant',
+              text: SAMPLE_RESPONSE,
+              professor: target,
+              routed: mode === 'auto'
+            }]);
+          }, 1800);
+        }
+      };
+
+      const isEmpty = messages.length === 0;
+      const modeLabel = { auto: 'Concierge auto-routes to the best professor', direct: 'Asking one professor directly', council: 'Asking several professors at once' };
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          {/* Header */}
+          <div className="app-header">
+            <BrandLockup />
+          </div>
+
+          {/* Routing mode selector */}
+          <div className="mode-selector">
+            <button className={'mode-tab' + (mode === 'auto' ? ' active' : '')} onClick={() => setMode('auto')}>
+              <span className="mode-tab-icon">🎓</span> Concierge
+            </button>
+            <button className={'mode-tab' + (mode === 'direct' ? ' active' : '')} onClick={() => setMode('direct')}>
+              <span className="mode-tab-icon">👤</span> Direct
+            </button>
+            <button className={'mode-tab' + (mode === 'council' ? ' active' : '')} onClick={() => setMode('council')}>
+              <span className="mode-tab-icon">⚖️</span> Council
+            </button>
+          </div>
+
+          {/* Main chat area */}
+          <div className="chat-scroll" ref={scrollRef}>
+            {isEmpty && (
+              <div className="empty-state" style={{ paddingTop: isMobile ? '48px' : '40px' }}>
+                <div className="empty-headline">What are you working through?</div>
+                <p className="empty-subtext">{modeLabel[mode]}.</p>
+                <div className="empty-chips">
+                  {starterChips.map((chip, i) => (
+                    <button
+                      key={i}
+                      className="chip chip-large"
+                      onClick={() => setInput(chip)}
+                      style={{ background: 'white', border: '1px solid var(--color-border)' }}
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!isEmpty && messages.map((msg, i) => {
+              if (msg.role === 'user') return <ChatBubble key={i} message={msg} />;
+              if (msg.type === 'council') return <CouncilBlock key={i} msg={msg} />;
+              const p = FACULTY.find(f => f.id === msg.professor);
+              return (
+                <div key={i}>
+                  {msg.routed && p && (
+                    <div className="attribution-chip">
+                      <span className="attribution-avatar">{p.emoji}</span>
+                      Drawing on {p.name}
+                    </div>
+                  )}
+                  <ChatBubble message={msg} />
+                </div>
+              );
+            })}
+
+            {isTyping && (
+              <div className="bubble-container bubble-agent">
+                <div className="bubble-avatar" style={{ background: 'var(--color-surface-soft)' }}>
+                  {FACULTY.find(f => f.id === isTyping.prof)?.emoji || '🎓'}
+                </div>
+                <div className="typing-dots">
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
+                </div>
+              </div>
+            )}
+
+            {convening && (
+              <div className="council-convening">
+                <div className="council-convening-label">
+                  <div className="convening-avatars">
+                    {councilSelected.slice(0, 5).map(p => (
+                      <span className="mini-avatar" key={p.id}>{p.emoji}</span>
+                    ))}
+                  </div>
+                  Convening {councilSelected.length} professors…
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Composer */}
+          <div className="composer-box">
+            {mode !== 'auto' && (
+              <div className="target-bar" onClick={() => setShowPicker(true)}>
+                <span className="target-bar-label">{mode === 'direct' ? 'Asking' : 'Council'}</span>
+                <div className="target-bar-value">
+                  {mode === 'direct' ? (
+                    <>
+                      <span className="mini-avatar" style={{ background: 'var(--color-surface-soft)' }}>{targetProf.emoji}</span>
+                      <span className="target-name">{targetProf.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="avatar-stack">
+                        {councilSelected.slice(0, 5).map(p => (
+                          <span className="mini-avatar" key={p.id}>{p.emoji}</span>
+                        ))}
+                      </div>
+                      <span className="target-name">{councilSelected.length} professors</span>
+                    </>
+                  )}
+                </div>
+                <span className="target-bar-chevron">▾ Change</span>
+              </div>
+            )}
+            <textarea
+              className="input-field"
+              placeholder={
+                mode === 'direct' ? `Ask ${targetProf.name.split(' ').pop()}…`
+                : mode === 'council' ? 'Ask the council a question…'
+                : 'Ask me anything…'
+              }
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={handleSend}
+              disabled={!input.trim() || (mode === 'council' && councilProfs.length === 0)}
+              style={{ alignSelf: 'flex-end', minWidth: '100px' }}
+            >
+              {mode === 'council' ? 'Convene' : 'Send'}
+            </button>
+          </div>
+
+          {showPicker && (
+            <PickerSheet
+              mode={mode}
+              isMobile={isMobile}
+              selected={mode === 'direct' ? [directProf] : councilProfs}
+              onClose={() => setShowPicker(false)}
+              onConfirm={(sel) => {
+                if (mode === 'direct') setDirectProf(sel[0]);
+                else setCouncilProfs(sel);
+                setShowPicker(false);
+              }}
+            />
+          )}
+        </div>
+      );
+    }
+
+    function FacultyScreen({ onSelectProfessor, isMobile }) {
+      const [search, setSearch] = useState('');
+      const [filter, setFilter] = useState(null);
+
+      const filtered = FACULTY.filter(prof => {
+        const matchSearch = prof.name.toLowerCase().includes(search.toLowerCase()) ||
+                           prof.domain.toLowerCase().includes(search.toLowerCase());
+        return matchSearch;
+      });
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div className="app-header">
+            <div className="brand-mark-sm"><BrandMark size={22} /></div>
+            <div style={{ flex: 1 }}>
+              <div className="app-header-title">Faculty Directory</div>
+              <div className="app-header-subtitle">17 professors & experts</div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div className="search-field">
+              <div className="search-icon">🔍</div>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search by name or domain..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <div className="faculty-grid">
+              {filtered.map((prof) => (
+                <div
+                  key={prof.id}
+                  className="faculty-card"
+                  onClick={() => onSelectProfessor(prof.id)}
+                >
+                  <div className="faculty-header">
+                    <div className="faculty-avatar" style={{ background: '#E7E5E1' }}>
+                      {prof.emoji}
+                    </div>
+                    <div className="faculty-info">
+                      <div className="faculty-name">{prof.name}</div>
+                      <div className="faculty-session">{prof.session}</div>
+                    </div>
+                  </div>
+                  <div className="faculty-domain">{prof.domain}</div>
+                  <div className="faculty-cta">
+                    <button className="btn btn-secondary" style={{ width: '100%', fontSize: '13px' }}>
+                      Chat 1:1
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ProfessorChatScreen({ professorId, onBack, isMobile }) {
+      const prof = FACULTY.find(p => p.id === professorId);
+      const [messages, setMessages] = useState([]);
+      const [input, setInput] = useState('');
+      const [isTyping, setIsTyping] = useState(false);
+
+      const starterChips = [
+        `What's the core insight from your session?`,
+        'How do I apply this to my business?',
+        'Can you elaborate on that framework?',
+        'What are the most common pitfalls?'
+      ];
+
+      const handleSend = () => {
+        if (!input.trim()) return;
+        const newMessages = [
+          ...messages,
+          { role: 'user', text: input, professor: professorId }
+        ];
+        setMessages(newMessages);
+        setInput('');
+        setIsTyping(true);
+
+        setTimeout(() => {
+          newMessages.push({
+            role: 'assistant',
+            text: SAMPLE_RESPONSE,
+            professor: professorId
+          });
+          setMessages([...newMessages]);
+          setIsTyping(false);
+        }, 2000);
+      };
+
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          {/* Header */}
+          <div className="app-header">
+            <button className="btn-back" onClick={onBack}>←</button>
+            <div style={{ flex: 1 }}>
+              <div className="app-header-title">{prof.name}</div>
+              <div className="app-header-subtitle">{prof.session}</div>
+            </div>
+          </div>
+
+          {prof.caution && (
+            <div className="caution-line">
+              <div className="caution-icon">⚠️</div>
+              <div>Not individualized medical, legal, or investment advice.</div>
+            </div>
+          )}
+
+          {/* Main chat area */}
+          <div className="chat-scroll">
+            {messages.length === 0 && (
+              <div className="empty-state" style={{ paddingTop: '40px' }}>
+                <div className="empty-headline">Chat with {prof.name.split(' ').pop()}</div>
+                <p className="empty-subtext">
+                  Ask about their session, frameworks, or how to apply their ideas.
+                </p>
+                <div className="empty-chips">
+                  {starterChips.map((chip, i) => (
+                    <button
+                      key={i}
+                      className="chip chip-large"
+                      onClick={() => setInput(chip)}
+                      style={{ background: 'white', border: '1px solid var(--color-border)' }}
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {messages.map((msg, i) => (
+              <ChatBubble key={i} message={msg} />
+            ))}
+            {isTyping && (
+              <div className="bubble-container bubble-agent">
+                <div className="bubble-avatar" style={{ background: '#E7E5E1' }}>
+                  {prof.emoji}
+                </div>
+                <div className="typing-dots">
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Composer */}
+          <div className="composer-box">
+            <textarea
+              className="input-field"
+              placeholder={`Ask ${prof.name.split(' ').pop()}...`}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={handleSend}
+              disabled={!input.trim()}
+              style={{ alignSelf: 'flex-end', minWidth: '100px' }}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function ProgramScreen({ isMobile }) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div className="app-header">
+            <div className="brand-mark-sm"><BrandMark size={22} /></div>
+            <div>
+              <div className="app-header-title">Program</div>
+              <div className="app-header-subtitle">YPO × Stanford GSB 2026</div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={{ padding: 'var(--space-4)', background: 'var(--color-surface-card)', borderBottom: '1px solid var(--color-border)' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 600, marginBottom: 'var(--space-2)' }}>
+                Executive Education 2026
+              </h2>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                A curated 4-day program with 17 world-class faculty and guest speakers covering AI, leadership, innovation, and strategy.
+              </p>
+            </div>
+
+            <div className="program-list">
+              {FACULTY.map((prof, i) => (
+                <div key={prof.id} className="program-item">
+                  <div className="program-number">Session {String(i + 1).padStart(2, '0')}</div>
+                  <div className="program-name">{prof.name}</div>
+                  <div className="program-meta">{prof.session}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ============ MAIN APP ============ */
+
+    function App() {
+      const [hasEntered, setHasEntered] = useState(false);
+      const [activeTab, setActiveTab] = useState('ask');
+      const [selectedProfessor, setSelectedProfessor] = useState(null);
+      const [deviceMode, setDeviceMode] = useState('mobile'); // 'mobile' or 'desktop'
+
+      const isMobile = deviceMode === 'mobile';
+
+      const handleSelectProfessor = (profId) => {
+        setSelectedProfessor(profId);
+        setActiveTab('ask');
+      };
+
+      const handleBackFromProfessor = () => {
+        setSelectedProfessor(null);
+      };
+
+      if (!hasEntered) {
+        return (
+          <div style={{ width: '100%', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-surface-bg)' }}>
+            <WelcomeScreen onEnter={() => setHasEntered(true)} isMobile={isMobile} />
+          </div>
+        );
+      }
+
+      const screenContent = selectedProfessor ? (
+        <ProfessorChatScreen
+          professorId={selectedProfessor}
+          onBack={handleBackFromProfessor}
+          isMobile={isMobile}
+        />
+      ) : (
+        <>
+          {activeTab === 'ask' && <AskScreen isMobile={isMobile} />}
+          {activeTab === 'faculty' && <FacultyScreen onSelectProfessor={handleSelectProfessor} isMobile={isMobile} />}
+          {activeTab === 'program' && <ProgramScreen isMobile={isMobile} />}
+        </>
+      );
+
+      if (isMobile) {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f0f0f0', padding: 'var(--space-4)' }}>
+            <div style={{ position: 'relative' }}>
+              <div className="device-selector">
+                <button className={`device-btn ${deviceMode === 'mobile' ? 'active' : ''}`} onClick={() => setDeviceMode('mobile')}>
+                  Mobile 390px
+                </button>
+                <button className={`device-btn ${deviceMode === 'desktop' ? 'active' : ''}`} onClick={() => setDeviceMode('desktop')}>
+                  Desktop
+                </button>
+              </div>
+              <MobileFrame>
+                <div className="frame-content">
+                  {screenContent}
+                </div>
+                {!selectedProfessor && <TabBar activeTab={activeTab} onTabChange={setActiveTab} />}
+              </MobileFrame>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'fixed', top: 'var(--space-4)', left: 'var(--space-4)', zIndex: 1000 }}>
+              <button className={`device-btn ${deviceMode === 'mobile' ? 'active' : ''}`} onClick={() => setDeviceMode('mobile')} style={{ marginRight: 'var(--space-2)' }}>
+                Mobile 390px
+              </button>
+              <button className={`device-btn ${deviceMode === 'desktop' ? 'active' : ''}`} onClick={() => setDeviceMode('desktop')}>
+                Desktop
+              </button>
+            </div>
+            <DesktopFrame>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', paddingTop: '60px' }}>
+                {screenContent}
+              </div>
+            </DesktopFrame>
+          </div>
+        );
+      }
+    }
+
+    // Render app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
