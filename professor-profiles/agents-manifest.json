@@ -1,0 +1,50 @@
+{
+  "program": "YPO x Stanford GSB 2026",
+  "workspace": "ypo-stanford-2026",
+  "generated": "2026-06-14",
+  "build_environment": "Cloud Claude Code session with NO Relevance.AI connector. Artifacts are build-ready; live creation (relevance_agent_id/url, smoke-test transcripts) is executed by the operator via professor-profiles/build/runbook.md, or by a connected Relevance MCP. SDK cannot author agents/KBs (see BUILD_NOTES.md).",
+  "status_legend": {
+    "queued": "no artifacts yet (Phase 2)",
+    "artifacts-ready": "build spec generated; not yet created in Relevance",
+    "created": "live agent exists in Relevance",
+    "verified": "live agent passed smoke tests"
+  },
+  "agents": {
+    "james-zou": {
+      "name": "James Zou",
+      "display_name": "Prof. James Zou (AI)",
+      "session_title": "Multi-Agent AI Teams Accelerating Discovery",
+      "identity_status": "Confirmed",
+      "source_file": "professor-profiles/james-zou.md",
+      "build_spec": "professor-profiles/build/agents/james-zou.md",
+      "kb_name": "kb-james-zou",
+      "relevance_agent_id": null,
+      "relevance_agent_url": null,
+      "kb_attached": false,
+      "smoke_test": "spec ready; not yet run live",
+      "special_guardrails": ["no impersonation (study-aid framing)", "no medical/clinical advice", "no individualized investment advice"],
+      "status": "artifacts-ready",
+      "phase": 1,
+      "last_updated": "2026-06-14"
+    },
+    "ken-shotts": { "name": "Ken Shotts", "session_title": "Living Up to Your Values", "source_file": "professor-profiles/ken-shotts.md", "note": "Roster said 'Joel' — use Ken Shotts.", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "scott-brady": { "name": "Scott Brady", "session_title": "AI Applications in Silicon Valley", "source_file": "professor-profiles/scott-brady.md", "note": "Roster said 'Sean' — use Scott Brady. Investment guardrail.", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "ed-dehaan": { "name": "Ed deHaan", "session_title": "AI-Powered Accounting & Finance I & II", "source_file": "professor-profiles/ed-dehaan.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "baba-shiv": { "name": "Baba Shiv", "session_title": "Architecting the Mind & Body for Success", "source_file": "professor-profiles/baba-shiv.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "michael-lepech": { "name": "Michael Lepech", "session_title": "Organizational Imperatives for AI Value Capture", "source_file": "professor-profiles/michael-lepech.md", "note": "'Seven AI imperatives' are a flagged reconstruction — agent must say so.", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "diyi-yang": { "name": "Diyi Yang", "session_title": "The Art of the Possible with Generative AI I & II", "source_file": "professor-profiles/diyi-yang.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "colin-kahl": { "name": "Colin Kahl", "session_title": "Geopolitical Implications of the AI Race", "source_file": "professor-profiles/colin-kahl.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "dan-klein": { "name": "Dan Klein", "session_title": "The Art & Science of Storytelling", "source_file": "professor-profiles/dan-klein.md", "note": "Confirmed instructor is Dan Klein (not Aaker/Bagdonas/Kluger).", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "andy-papathanassiou": { "name": "Andy Papathanassiou", "session_title": "Innovation Mindset: Going Fast", "source_file": "professor-profiles/andy-papathanassiou.md", "note": "Roster said 'Pavlos' — use Andy 'Papa' Papathanassiou.", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "charles-oreilly": { "name": "Charles O'Reilly", "session_title": "The Challenge of Change / The Ambidextrous Leader", "source_file": "professor-profiles/charles-oreilly.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "jonathan-levav": { "name": "Jonathan Levav", "session_title": "Welcome, Fireside Chats, Takeaways, Wrap-Up", "source_file": "professor-profiles/jonathan-levav.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "darshan-shah": { "name": "Dr. Darshan Shah", "session_title": "Longevity & Health Optimization", "source_file": "professor-profiles/darshan-shah.md", "note": "STRICT medical guardrails: no diagnosis/prescription; flag evidence levels; note commercial incentives.", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "jake-saper": { "name": "Jake Saper", "session_title": "Fireside Chat (Emergence Capital)", "source_file": "professor-profiles/jake-saper.md", "note": "Investment guardrail (VC).", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "dj-sampath": { "name": "DJ Sampath", "session_title": "Enterprise AI at Scale (Cisco)", "source_file": "professor-profiles/dj-sampath.md", "note": "Vendor-neutrality guardrail (Cisco).", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "manuel-bronstein": { "name": "Manuel Bronstein", "session_title": "Building World-Class Products", "source_file": "professor-profiles/manuel-bronstein.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false },
+    "jamie-siminoff": { "name": "Jamie Siminoff", "session_title": "Founder of Ring", "source_file": "professor-profiles/jamie-siminoff.md", "status": "queued", "phase": 2, "relevance_agent_id": null, "kb_attached": false }
+  },
+  "excluded": {
+    "jeffrey-hall": "Dropped from roster (AI Governance slot replaced by DJ Sampath). Do NOT build."
+  }
+}
