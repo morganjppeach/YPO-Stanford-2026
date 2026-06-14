@@ -11,10 +11,13 @@ RAG + a Council Workforce) behind a **gated portal**.
 ## Repo layout
 ```
 PROJECT_PLAN.md      # the plan — read this first (9 sections + appendix)
+BUILD_NOTES.md       # verified findings + Phase 1 runbook (build log)
 .env.example         # environment template (copy to .env)
 .env                 # your local secrets — GIT-IGNORED, never committed
-.gitignore           # excludes .env, node_modules, etc.
+.gitignore           # excludes .env, node_modules, data/, etc.
 package.json         # minimal: just enough to run the connectivity check
+professors/          # RAG source material per professor (see professors/README.md)
+  _TEMPLATE/         #   copy this to professors/<slug>/ for each professor
 scripts/
   check-connection.mjs   # SAFE read-only Relevance check (no credits)
   README.md              # what each script does + credit flags

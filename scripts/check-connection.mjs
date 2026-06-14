@@ -3,16 +3,33 @@
 // What it does:  authenticates with your server-side key and lists your agents
 //                (Agent.getAll()). Listing is a read; it does NOT run any agent.
 // What it costs: nothing — no agent run, so no Actions/Vendor Credits are spent.
-//                (We will still confirm against your usage meter the first time.)
+//                (We'll still confirm against your usage meter the first time.)
 //
-// Run AFTER you've added your key to .env and installed deps:
+// Run from the PROJECT ROOT, after adding your key to .env:
 //     npm install
 //     npm run check
 //
-// Do NOT commit your .env. This script reads from process.env only.
+// This script reads from process.env and auto-loads .env (no extra deps,
+// no special Node version needed). It never prints your key.
 
-import { createClient, Agent, REGION_US, REGION_EU, REGION_AU } from "@relevanceai/sdk";
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
+// --- minimal .env loader (project root = one level up from /scripts) --------
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const envPath = join(projectRoot, ".env");
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, "utf8").split("\n")) {
+    const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*?)\s*$/);
+    if (!m) continue; // skips blank lines and # comments
+    let [, key, val] = m;
+    if (/^".*"$|^'.*'$/.test(val)) val = val.slice(1, -1);
+    if (!(key in process.env)) process.env[key] = val;
+  }
+}
+
+const { createClient, Agent, REGION_US, REGION_EU, REGION_AU } = await import("@relevanceai/sdk");
 const REGIONS = { us: REGION_US, eu: REGION_EU, au: REGION_AU };
 
 const { RELEVANCE_API_KEY, RELEVANCE_REGION, RELEVANCE_PROJECT_ID } = process.env;
@@ -24,19 +41,15 @@ function fail(msg) {
 
 if (!RELEVANCE_API_KEY || !RELEVANCE_REGION || !RELEVANCE_PROJECT_ID) {
   fail(
-    "Missing env vars. Set RELEVANCE_API_KEY, RELEVANCE_REGION (us|eu|au), and " +
-      "RELEVANCE_PROJECT_ID in your .env first."
+    "Missing env vars. Create .env (cp .env.example .env) and set RELEVANCE_API_KEY, " +
+      "RELEVANCE_REGION (us|eu|au), and RELEVANCE_PROJECT_ID."
   );
 }
 
 const region = REGIONS[String(RELEVANCE_REGION).toLowerCase()];
 if (!region) fail(`RELEVANCE_REGION must be one of: us, eu, au (got "${RELEVANCE_REGION}").`);
 
-createClient({
-  apiKey: RELEVANCE_API_KEY,
-  region,
-  project: RELEVANCE_PROJECT_ID,
-});
+createClient({ apiKey: RELEVANCE_API_KEY, region, project: RELEVANCE_PROJECT_ID });
 
 try {
   const agents = await Agent.getAll(); // read-only list

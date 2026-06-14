@@ -1,0 +1,18 @@
+{
+  "slug": "",
+  "displayName": "",
+  "shortName": "",
+  "titleAffiliation": "",
+  "domains": [],
+  "expertiseKeywords": [],
+  "personaSummary": "",
+  "voiceStyle": "",
+  "knowledgeBaseName": "kb_prof_<slug>",
+  "agentName": "agent_prof_<slug>",
+  "agentId": "",
+  "guardrails": {
+    "stayInDomain": true,
+    "refuseTopics": [],
+    "aiDisclosure": "I'm an AI persona of <displayName>, grounded in their public work and lectures — not the professor themselves."
+  }
+}

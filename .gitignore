@@ -14,5 +14,8 @@ npm-debug.log*
 dist/
 .cache/
 
+# Local data (tokens, rosters — may contain PII)
+data/
+
 # OS
 .DS_Store
