@@ -20,6 +20,23 @@ implementation-level facts and corrections discovered while building.)
    exposed** in the docs pages read so far — see open question in `PROJECT_PLAN.md` §9. We'll confirm
    from the dashboard API reference, or use the UI / Claude Code plugin for authoring.
 
+## Connectivity verified — 2026-06-14 (Mac = source of truth)
+
+Relevance credentials are verified on the owner's Mac (`/Users/jpjames/YPO-Stanford-2026/.env`),
+**not** in the cloud container (the two are separate machines; the container can't see the Mac's
+git-ignored `.env`).
+
+- `npm run check` on the Mac → **✓ Connected to Relevance AI (region: `us`)**; read-only
+  `Agent.getAll()` found **20 agents**; **no agents run, no credits spent.**
+- Identifiers (fingerprints only — no secret stored here): key `…Nzk0`, `RELEVANCE_REGION=us`,
+  project `…5645`.
+
+**Decision: the full-access project key stays OFF the cloud container.** It grants full project access
+(`.env.example`), so per our ground rules (server-side only; never in version control) it lives only on
+the Mac and the eventual server-side deployment. Claude Code in the cloud therefore makes **no live
+Relevance calls** — the Mac check is the source of truth. If the container ever needs Relevance access,
+add a **scoped** key as a container secret/env var (never the full project key, never committed).
+
 ## Corrected build path (what creates what)
 
 | Task | Tool | Why |
