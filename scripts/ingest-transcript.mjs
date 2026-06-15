@@ -34,7 +34,7 @@ const into = args.into;
 const date = args.date ?? new Date().toISOString().slice(0, 10);
 const titlePrefix = args["title-prefix"] ?? "Transcript";
 const sourceType = args["source-type"] ?? "transcript";
-const sectionPrefix = args["section-prefix"] ?? "kickoff";
+const sectionPrefix = args["section-prefix"] ?? "transcript";
 const commit = Boolean(args.commit);
 if (!into || (!args["from-set"] && !args.file)) {
   console.error("Required: --into <set> and one of --from-set <set> | --file <path>");
@@ -67,23 +67,45 @@ if (fm) raw = raw.slice(fm[0].length).trim();
 const h1 = raw.match(/^#\s+(.+)$/m)?.[1]?.trim();
 if (h1) raw = raw.replace(/^#\s+.+$/m, "").trim();
 
-const parts = raw.split(/\n(?=##\s+)/).map((s) => s.trim()).filter(Boolean);
-
 const slug = (s) =>
   s.toLowerCase().replace(/['"“”]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 
-const rows = parts.map((part) => {
-  const header = (part.match(/^##\s+(.+)$/m)?.[1] ?? "section").trim();
-  const clean = header.replace(/^§\s*\d+\s*[—–-]\s*/, "").replace(/\s*\(.*?\)\s*$/, "").trim();
-  return {
-    content: (h1 ? `From: ${h1}\n\n` : "") + part,
+// Prefer section-aware chunking on "## " headers; fall back to size-based for
+// raw transcripts that have no markdown sections.
+const parts = raw.split(/\n(?=##\s+)/).map((s) => s.trim()).filter(Boolean);
+
+let rows;
+if (parts.length > 1) {
+  rows = parts.map((part) => {
+    const header = (part.match(/^##\s+(.+)$/m)?.[1] ?? "section").trim();
+    const clean = header.replace(/^§\s*\d+\s*[—–-]\s*/, "").replace(/\s*\(.*?\)\s*$/, "").trim();
+    return {
+      content: (h1 ? `From: ${h1}\n\n` : "") + part,
+      source_type: sourceType,
+      title: `${titlePrefix} — ${clean}`,
+      date,
+      section: `${sectionPrefix}-${slug(clean)}`,
+      url: "",
+    };
+  });
+} else {
+  const maxChars = Number(args["max-chars"]) || 2800; // ~700 tokens
+  const chunks = [];
+  let cur = "";
+  for (const para of raw.split(/\n\s*\n/)) {
+    if (cur && cur.length + para.length + 2 > maxChars) { chunks.push(cur); cur = ""; }
+    cur += (cur ? "\n\n" : "") + para.trim();
+  }
+  if (cur.trim()) chunks.push(cur.trim());
+  rows = chunks.map((content, i) => ({
+    content: (h1 ? `From: ${h1}\n\n` : "") + content,
     source_type: sourceType,
-    title: `${titlePrefix} — ${clean}`,
+    title: `${titlePrefix} — part ${i + 1}`,
     date,
-    section: `${sectionPrefix}-${slug(clean)}`,
+    section: `${sectionPrefix}-${i + 1}`,
     url: "",
-  };
-});
+  }));
+}
 
 // 3) Report (dry-run) or insert.
 console.log(`Source H1: ${h1 ?? "(none)"}`);
