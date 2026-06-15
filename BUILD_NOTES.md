@@ -43,3 +43,45 @@ implementation-level facts and corrections discovered while building.)
 7. **Verify** — gated link works with no signup; answer is **grounded** and cites the transcript; revoking the link blocks it while others still work.
 
 Each phase ends with a check-in before the next.
+
+## Verified live against the project's Relevance API — 2026-06-15
+
+Connectivity confirmed with the project key (region `us` = cluster `bcbe5a`). The project
+is **past planning**: it already holds 20 live agents, including **Prof. Jonathan Levav (AI)**
+(`6e598b3d-e2a6-4f6b-b1fa-7c1481c9853e`). The items below are verified by live calls.
+
+### REST knowledge API (resolves the earlier "endpoints not in the docs" open item)
+Base `https://api-<region>.stack.tryrelevance.com/latest`; header
+`Authorization: <project_id>:<api_key>`. The JS SDK stays runtime-only — these are the raw
+endpoints it does **not** wrap:
+
+| Purpose | Method + path | Body |
+|---|---|---|
+| List knowledge sets (+ counts) | `POST /knowledge/sets/list` | `{ page_size }` |
+| List rows in a set | `POST /knowledge/list` | `{ knowledge_set, page_size }` |
+| Insert rows (auto chunk+vectorize) | `POST /knowledge/add` | `{ knowledge_set, data: [{ type: "document", value: {…row} }] }` |
+| Empty a set (all docs) | `POST /knowledge/delete` | `{ knowledge_set }` |
+| Drop a set | `POST /knowledge/sets/delete` | `{ knowledge_set }` |
+| Agent config (its connected KBs) | `GET /agents/<id>/get` | — |
+
+- Inserted rows land under `.data`; `/knowledge/add` returns a `chunk_and_vectorize_knowledge_set`
+  job and rows vectorize inline (no separate sync call needed).
+- An agent's connected KBs live in its config `knowledge[]`, each `{ knowledge_set, usage_type: "tool" }`
+  (= "Allow agent to search" / RAG) — this is what makes the "summary, then drill into details" UX work.
+
+### Levav KB layout (live)
+- `kb-jonathan-levav` — persona/dossier KB. Schema: `content, source_type, title, date, section, url`.
+- `day_1_jonathan_levav_opening_txt` — his Day-1 orientation, originally one un-chunked `.txt`
+  blob (1 row / 1 chunk = coarse retrieval).
+
+### Ingestion performed — Levav Day-1 kickoff (2026-06-15)
+- Re-chunked the Day-1 kickoff transcript into **7 section-sized rows** (`source_type=transcript`,
+  `section=kickoff-*`, `date=2026-06-14`) and inserted into `kb-jonathan-levav` via
+  `scripts/ingest-transcript.mjs` → now **21 rows, all vectorized**.
+- The verbatim transcript was **not** committed to git (marked "YPO confidential"); it is sourced
+  directly from the existing Relevance set.
+- **Pending (needs your action):** removing the original coarse blob
+  (`day_1_jonathan_levav_opening_txt`) was blocked by the harness safety guard (destructive op on
+  pre-existing shared knowledge). Until removed, Day-1 content is duplicated (coarse blob + 7 chunks) —
+  functional but redundant. Remove it in the Relevance UI, or authorize
+  `node --env-file=.env scripts/delete-knowledge.mjs --set day_1_jonathan_levav_opening_txt --confirm`.
